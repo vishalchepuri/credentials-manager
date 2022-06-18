@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+<title>Signup</title>
+</head>
+<body>
+  <body>
+    <div class="login-page">
+      <div class="form">
+        <div class="login">
+          <div class="login-header">
+            <h3>SIGNUP</h3>
+          </div>
+        </div>
+        <form class="login-form" action="/submit" method="post">
+          <input type="email" name="username" placeholder="Email"/>
+          <input type="password" name="paswd" placeholder="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"/>
+          <button>Submit</button>
+          <p class="message">Have an account? <a href="{{ url_for('signin') }}">Login</a></p>
+        </form>
+      </div>
+
+    </div>
+</body>
+</body>
+</html>

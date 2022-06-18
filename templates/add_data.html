@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Credential Manager</title>
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
+    </head>
+    <body>
+        <form action="/adddata" method="POST">
+          <div class="container">
+
+            <label><b>Website</b></label>
+            <input type="text" name="website">
+
+            <label><b>Username</b></label>
+            <input type="text" name="username">
+
+            <label><b>Password</b></label>
+            <input type="text" name="password">
+
+            <label><b>Backupcodes</b></label>
+            <input type="text" name="backupcodes">
+            <hr>
+            <button type="submit" class="registerbtn">Submit</button>
+          </div>
+        </form>
+    </body>
+</html>

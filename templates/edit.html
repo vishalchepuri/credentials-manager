@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Credential Manager</title>
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
+    </head>
+    <body>
+        <form action="/update_data" method="POST">
+          <div class="container">
+            <input style="border: none;background: white;font-weight: bold;font-size: x-large" type="text"  name="type" value="{{ data['Type'] }}" readonly>
+            <hr>
+            <label><b>Username</b></label>
+            <input type="text" name="username" value="{{ data['Username'] }}" >
+
+            <label><b>Password</b></label>
+            <input type="text" name="password" value="{{ data['Password'] }}" >
+
+            <label><b>Backupcodes</b></label>
+            <input type="text" name="backupcodes" value="{{ data['Backupcodes'] }}">
+            <hr>
+            <button type="submit" class="registerbtn">Submit</button>
+          </div>
+        </form>
+    </body>
+</html>
