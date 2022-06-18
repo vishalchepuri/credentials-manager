@@ -34,9 +34,9 @@ def update_document(website,data):
 
 # get_result('Vishalchepuri1')
 
-# def set_result(ID,Type,data):
-#     res = db.collection(ID).document(Type).set(data)
-#
+def set_result(ID,Type,data):
+    res = db.collection(ID).document(Type).set(data)
+
 # def set_re(ID=0, backup_codes=0, password=0, enc_key=0, username=0):
 #     ID = "123456"
 #     backup_codes = "213213,21321312,23,213,123,213,213,21312,3,2,13,12,3,213,2,13,21,3"
@@ -50,7 +50,7 @@ def update_document(website,data):
 #         'Password': secure.encrypt(password, enc_key),
 #         'Backupcodes': secure.encrypt(backup_codes, enc_key),
 #     })
-#
+# #
 #
 # ID = "Manichandra"
 # backup_codes = "213213,21321312,23,213,123,213,213,21312,3,2,13,12,3,213,2,13,21,3"

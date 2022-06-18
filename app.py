@@ -39,20 +39,17 @@ def submit():
     # #         dict['msg'] = "Another account is using the same email."
     # #     else:
     # #         dict['msg'] = "Done"
-    data = firestore.get_result('Vishalchepuri1')
+    # data = firestore.get_result('Vishalchepuri1')
     # print(type(data))
-    decryptedData = {}
-    for i in data:
-        decryptedData[i] = {}
-        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'],'password123')
-        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'],'password123')
-        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'],'password123')
-
-    return render_template('table.html', data=decryptedData)
+    # decryptedData = {}
+    # for i in data:
+    #     decryptedData[i] = {}
+    #     decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'],'password123')
+    #     decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'],'password123')
+    #     decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'],'password123')
+    #
+    return render_template('add_data.html')
     # return render_template('result.html', dict=dic)
-
-
-
 
 
 @app.route('/edit/<id>', methods=['GET'])
@@ -72,9 +69,9 @@ def edit(id):
 def update_data():
     decryptedData={}
     website = str(request.form['type'])
-    decryptedData['Username'] = secure.encrypt(str(request.form['username']),p)
-    decryptedData['Password'] = secure.encrypt(str(request.form['password']),p)
-    decryptedData['Backupcodes'] = secure.encrypt(str(request.form['backupcodes']),p)
+    decryptedData['Username'] = secure.encrypt(str(request.form['username']), p)
+    decryptedData['Password'] = secure.encrypt(str(request.form['password']), p)
+    decryptedData['Backupcodes'] = secure.encrypt(str(request.form['backupcodes']), p)
     print(decryptedData)
     firestore.update_document(website, decryptedData)
     data = firestore.get_result('Vishalchepuri1')
@@ -93,14 +90,34 @@ def update_data():
 @app.route('/login', methods=['POST', 'GET', 'PATCH'])
 def login():
     dict = {}
-    if request.method == 'POST':
-        email = str(request.form['username'])
-        password = str(request.form['paswd'])
-        if auth.login(email, password):
-            dict['msg'] = "Done"
-        else:
-            dict['msg'] = "The Email or password provided is incorrect.."
-    return render_template('result.html', dict=dict)
+    # if request.method == 'POST':
+    #     email = str(request.form['username'])
+    #     password = str(request.form['paswd'])
+    #     if auth.login(email, password):
+    #         dict['msg'] = "Done"
+    #     else:
+    #         dict['msg'] = "The Email or password provided is incorrect.."
+    data = firestore.get_result('Vishalchepuri1')
+    decryptedData = {}
+    for i in data:
+        decryptedData[i] = {}
+        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], 'password123')
+        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], 'password123')
+        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], 'password123')
+    return render_template('table.html', data=decryptedData)
+
+
+@app.route('/add_data', methods=['POST', 'GET', 'PATCH'])
+def add_data():
+    website = str(request.form['website'])
+    id = u'Vishal1234'
+    data = {
+        u'Username':secure.encrypt(str(request.form['username']),p),
+        u'Password':secure.encrypt(str(request.form['password']),p),
+        u'Backupcodes':secure.encrypt(str(request.form['backupcodes']),p)
+    }
+    firestore.set_result(id,website,data)
+    return render_template('add_data.html')
 
 
 
