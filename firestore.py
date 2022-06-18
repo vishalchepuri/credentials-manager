@@ -26,6 +26,11 @@ def get_document(ID, document ,paswd='password123'):
     print(res)
     return res
 
+def update_document(website,data):
+    city_ref = db.collection('Vishalchepuri1').document(website)
+    city_ref.update(data)
+
+
 
 # get_result('Vishalchepuri1')
 
