@@ -1,0 +1,11 @@
+body {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+td, th {
+    text-align: center;
+    border: 1px solid black;
+    padding: 10px;
+}
