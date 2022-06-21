@@ -13,9 +13,11 @@
             <h3>LOGIN</h3>
           </div>
         </div>
-        <form class="login-form" action="/login" method="post">
-          <input type="email" name="username" placeholder="Email"/>
-          <input type="password" name="paswd" placeholder="password"/>
+        <form class="login-form" action="/login"  method="post">
+          <input type="email" name="username"  placeholder="Email"/>
+          <input type="password" name="password" placeholder="password"/>
+            <p class="message">Forgot password?<a href="{{ url_for('forgotpassword') }}">click here</a></p>
+            <br>
           <button>login</button>
           <p class="message">Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
         </form>

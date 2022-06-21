@@ -15,7 +15,11 @@
         </div>
         <form class="login-form" action="/submit" method="post">
           <input type="email" name="username" placeholder="Email"/>
-          <input type="password" name="paswd" placeholder="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"/>
+          <input type="password" name="password" placeholder="password" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"/>
+{#            <p style="font-size: 10px">password should contain letters,numbers & symbols</p>#}
+{#            {% if dict %}#}
+{#            <p>{{ dict['msg'] }}</p>#}
+{#            {% endif %}#}
           <button>Submit</button>
           <p class="message">Have an account? <a href="{{ url_for('signin') }}">Login</a></p>
         </form>

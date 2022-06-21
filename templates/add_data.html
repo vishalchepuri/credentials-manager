@@ -5,7 +5,8 @@
         <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
     </head>
     <body>
-        <form action="/adddata" method="POST">
+        <p><a href="{{ url_for('table') }}">Home</a></p>
+        <form action="/add_data" method="POST">
           <div class="container">
 
             <label><b>Website</b></label>
