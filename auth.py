@@ -1,5 +1,4 @@
 import pyrebase
-import json
 config = {
         "apiKey": "AIzaSyDLKJlcPE55UnP6iN1ziuiYEoRVEUPToTA",
         "authDomain": "learning-54b3e.firebaseapp.com",
@@ -14,18 +13,20 @@ firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 
 
-def signup(email, password):
+def signup(email="test", password="test"):
     try:
         return auth.create_user_with_email_and_password(email, password)
     except Exception as e:
-        return "Email already exists"
+        return None
 
 
 
-def login(email, password):
+def login(email="test", password="test"):
     try:
         return auth.sign_in_with_email_and_password(email, password)
     except:
-        return "Invalid email or password"
+        return None
 
-print(login("adfadadsf@saadfc.adf", "adfadf"))
+def forgot_password(email="test"):
+    auth.send_password_reset_email()
+

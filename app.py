@@ -1,22 +1,13 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, render_template, request
 import auth
 import firestore
-
 import secure
-
+email = ""
+encryption_password = ""
 app = Flask(__name__)
-p = 'password123'
+check = False
 
 
-# def table():
-#     data = firestore.get_result('Vishalchepuri1')
-#     decryptedData = {}
-#     for i in data:
-#         decryptedData[i] = {}
-#         decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], 'password123')
-#         decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], 'password123')
-#         decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], 'password123')
-#     return render_template('table.html', data=decryptedData)
 
 
 @app.route('/')
@@ -31,14 +22,16 @@ def signup():
 
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
-    # dic = {'dafd':'adfads'}
-    # # if request.method == 'POST':
-    # #     email = str(request.form['username'])
-    # #     password = str(request.form['paswd'])
-    # #     if auth.signup(email, password):
-    # #         dict['msg'] = "Another account is using the same email."
-    # #     else:
-    # #         dict['msg'] = "Done"
+    global check
+    global email
+    if request.method == 'POST':
+        email = str(request.form['username'])
+        password = str(request.form['password'])
+        check = auth.signup(email, password)
+        if check:
+            return render_template('encryption_password.html')
+        else:
+            return render_template('login.html', dict=dict)
     # data = firestore.get_result('Vishalchepuri1')
     # print(type(data))
     # decryptedData = {}
@@ -51,75 +44,106 @@ def submit():
     return render_template('add_data.html')
     # return render_template('result.html', dict=dic)
 
+@app.route('/login', methods=['POST', 'GET', 'PATCH'])
+def login():
+    global check
+    global email
+    if request.method == 'POST':
+        email = str(request.form['username'])
+        password = str(request.form['password'])
+        check = auth.login(email, password)
+        if check:
+            return render_template('encryption_password.html')
+        else:
+            return render_template('signup.html')
+
+
+@app.route('/data', methods=['POST', 'GET'])
+def table():
+    global check
+    data = firestore.get_result(email)
+    decryptedData = {}
+    for i in data:
+        decryptedData[i] = {}
+        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], 'password123')
+        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], 'password123')
+        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], 'password123')
+    return render_template('table.html', data=decryptedData)
+
 
 @app.route('/edit/<id>', methods=['GET'])
 def edit(id):
+    global check
     # print("got it")
-    data = firestore.get_document("Vishalchepuri1", id)
+    if id == 'Website':
+        pass
+    data = firestore.get_document(email, id)
     decryptedData = {}
-    decryptedData["Type"]=id
-    decryptedData["Username"] = secure.decrypt(data['Username'], 'password123')
-    decryptedData["Password"] = secure.decrypt(data['Password'], 'password123')
-    decryptedData["Backupcodes"] = secure.decrypt(data['Backupcodes'], 'password123')
+    decryptedData["Type"] = id
+    decryptedData["Username"] = secure.decrypt(data['Username'], encryption_password)
+    decryptedData["Password"] = secure.decrypt(data['Password'], encryption_password)
+    decryptedData["Backupcodes"] = secure.decrypt(data['Backupcodes'], encryption_password)
     # print(decryptedData)
     return render_template("edit.html", data=decryptedData)
 
 
 @app.route('/update_data', methods=['POST', 'GET'])
 def update_data():
+    global check
+    global encryption_password
     decryptedData={}
     website = str(request.form['type'])
-    decryptedData['Username'] = secure.encrypt(str(request.form['username']), p)
-    decryptedData['Password'] = secure.encrypt(str(request.form['password']), p)
-    decryptedData['Backupcodes'] = secure.encrypt(str(request.form['backupcodes']), p)
-    print(decryptedData)
-    firestore.update_document(website, decryptedData)
-    data = firestore.get_result('Vishalchepuri1')
+    decryptedData['Username'] = secure.encrypt(str(request.form['username']), encryption_password)
+    decryptedData['Password'] = secure.encrypt(str(request.form['password']), encryption_password)
+    decryptedData['Backupcodes'] = secure.encrypt(str(request.form['backupcodes']),encryption_password)
+    # print(decryptedData)
+    firestore.update_document(email,website, decryptedData,encryption_password)
+    data = firestore.get_result(email)
     # print(type(data))
     decryptedData = {}
     for i in data:
         decryptedData[i] = {}
-        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], 'password123')
-        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], 'password123')
-        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], 'password123')
+        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
+        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
+        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
 
-    return render_template('table.html', data=decryptedData)
-
-
-
-@app.route('/login', methods=['POST', 'GET', 'PATCH'])
-def login():
-    dict = {}
-    # if request.method == 'POST':
-    #     email = str(request.form['username'])
-    #     password = str(request.form['paswd'])
-    #     if auth.login(email, password):
-    #         dict['msg'] = "Done"
-    #     else:
-    #         dict['msg'] = "The Email or password provided is incorrect.."
-    data = firestore.get_result('Vishalchepuri1')
-    decryptedData = {}
-    for i in data:
-        decryptedData[i] = {}
-        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], 'password123')
-        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], 'password123')
-        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], 'password123')
     return render_template('table.html', data=decryptedData)
 
 
 @app.route('/add_data', methods=['POST', 'GET', 'PATCH'])
 def add_data():
+    global check
+    # if check:
     website = str(request.form['website'])
-    id = u'Vishal1234'
+    id = email
     data = {
-        u'Username':secure.encrypt(str(request.form['username']),p),
-        u'Password':secure.encrypt(str(request.form['password']),p),
-        u'Backupcodes':secure.encrypt(str(request.form['backupcodes']),p)
+        u'Username': secure.encrypt(str(request.form['username']), encryption_password),
+        u'Password': secure.encrypt(str(request.form['password']), encryption_password),
+        u'Backupcodes': secure.encrypt(str(request.form['backupcodes']), encryption_password)
     }
-    firestore.set_result(id,website,data)
+    firestore.set_result(id, website, data)
     return render_template('add_data.html')
 
+@app.route('/done', methods=['POST', 'GET'])
+def encryption_password():
+    global encryption_password
+    if request.method == 'POST':
+        # encryption_password = str(request.form['encryption_password'])
+        # data = firestore.get_result(email)
+        # decryptedData = {}
+        # for i in data:
+        #     decryptedData[i] = {}
+        #     decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
+        #     decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
+        #     decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
+        return table()
+    return render_template('login.html')
 
+
+@app.route('/forgotpassword', methods=['POST', 'GET'])
+def forgotpassword(email="test"):
+    auth.forgot_password(email)
+    return render_template('login.html')
 
 if __name__ == '__main__':
-    app.run(debug=True,port=5000)
+    app.run(debug=True, port=5000)
