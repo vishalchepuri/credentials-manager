@@ -20,6 +20,8 @@ def signup():
     return render_template('signup.html')
 
 
+
+
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
     global check
@@ -32,17 +34,7 @@ def submit():
             return render_template('encryption_password.html')
         else:
             return render_template('login.html', dict=dict)
-    # data = firestore.get_result('Vishalchepuri1')
-    # print(type(data))
-    # decryptedData = {}
-    # for i in data:
-    #     decryptedData[i] = {}
-    #     decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'],'password123')
-    #     decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'],'password123')
-    #     decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'],'password123')
-    #
     return render_template('add_data.html')
-    # return render_template('result.html', dict=dic)
 
 @app.route('/login', methods=['POST', 'GET', 'PATCH'])
 def login():
@@ -58,16 +50,21 @@ def login():
             return render_template('signup.html')
 
 
-@app.route('/data', methods=['POST', 'GET'])
+@app.route('/test',methods=['POST','GET'])
+def test():
+    return render_template('add_data.html')
+
+
+@app.route('/table', methods=['POST', 'GET'])
 def table():
     global check
     data = firestore.get_result(email)
     decryptedData = {}
     for i in data:
         decryptedData[i] = {}
-        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], 'password123')
-        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], 'password123')
-        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], 'password123')
+        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
+        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
+        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
     return render_template('table.html', data=decryptedData)
 
 
@@ -76,7 +73,7 @@ def edit(id):
     global check
     # print("got it")
     if id == 'Website':
-        pass
+        return render_template('table.html')
     data = firestore.get_document(email, id)
     decryptedData = {}
     decryptedData["Type"] = id
@@ -113,7 +110,6 @@ def update_data():
 @app.route('/add_data', methods=['POST', 'GET', 'PATCH'])
 def add_data():
     global check
-    # if check:
     website = str(request.form['website'])
     id = email
     data = {
@@ -128,15 +124,15 @@ def add_data():
 def encryption_password():
     global encryption_password
     if request.method == 'POST':
-        # encryption_password = str(request.form['encryption_password'])
-        # data = firestore.get_result(email)
-        # decryptedData = {}
-        # for i in data:
-        #     decryptedData[i] = {}
-        #     decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
-        #     decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
-        #     decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
-        return table()
+        encryption_password = str(request.form['encryption_password'])
+        data = firestore.get_result(email)
+        decryptedData = {}
+        for i in data:
+            decryptedData[i] = {}
+            decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
+            decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
+            decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
+        return render_template('table.html', data=decryptedData)
     return render_template('login.html')
 
 

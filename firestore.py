@@ -36,8 +36,7 @@ def update_document(email, website, data, password):
     else:
         pass
 
-def set_result(email, website, data, password):
-    if check_encryption_password(email, website, password):
-        db.collection(email).document(website).set(data)
+def set_result(email, website, data):
+    db.collection(email).document(website).set(data)
 
 
