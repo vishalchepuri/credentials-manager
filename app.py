@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, render_template, request
 import auth
 import firestore
@@ -6,6 +8,7 @@ email = ""
 encryption_password = ""
 app = Flask(__name__)
 check = False
+flag = 0
 
 
 
@@ -20,21 +23,26 @@ def signup():
     return render_template('signup.html')
 
 
+@app.route('/resetpassword')
+def resetpassword():
+    return render_template('forgotpassword.html')
 
 
 @app.route('/submit', methods=['POST', 'GET'])
 def submit():
     global check
-    global email
+    global email,flag
     if request.method == 'POST':
         email = str(request.form['username'])
         password = str(request.form['password'])
         check = auth.signup(email, password)
+        flag = 1
         if check:
             return render_template('encryption_password.html')
         else:
             return render_template('login.html', dict=dict)
     return render_template('add_data.html')
+
 
 @app.route('/login', methods=['POST', 'GET', 'PATCH'])
 def login():
@@ -73,7 +81,7 @@ def edit(id):
     global check
     # print("got it")
     if id == 'Website':
-        return render_template('table.html')
+        return table()
     data = firestore.get_document(email, id)
     decryptedData = {}
     decryptedData["Type"] = id
@@ -126,6 +134,8 @@ def encryption_password():
     if request.method == 'POST':
         encryption_password = str(request.form['encryption_password'])
         data = firestore.get_result(email)
+        if flag:
+            firestore.add_test_data(email,encryption_password)
         decryptedData = {}
         for i in data:
             decryptedData[i] = {}
