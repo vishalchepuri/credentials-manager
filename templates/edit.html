@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
     </head>
     <body>
+    <p><a href="{{ url_for('signin') }}">Logout</a></p>
         <form action="/update_data" method="POST">
           <div class="container">
             <input style="border: none;background: white;font-weight: bold;font-size: x-large" type="text"  name="type" value="{{ data['Type'] }}" readonly>
