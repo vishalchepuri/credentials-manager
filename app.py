@@ -133,10 +133,11 @@ def encryption_password():
     global encryption_password
     if request.method == 'POST':
         encryption_password = str(request.form['encryption_password'])
-        data = firestore.get_result(email)
         if flag:
             firestore.add_test_data(email,encryption_password)
+            time.sleep(1)
         decryptedData = {}
+        data = firestore.get_result(email)
         for i in data:
             decryptedData[i] = {}
             decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
