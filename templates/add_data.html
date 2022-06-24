@@ -2,10 +2,11 @@
 <html lang="en">
     <head>
         <title>Credential Manager</title>
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
     </head>
     <body>
-        <p><a href="{{ url_for('table') }}">Home</a></p>
+        <button type="button"   onclick="window.location.href='{{ url_for( 'table') }}';">Home</button>
         <form action="/add_data" method="POST">
           <div class="container">
             <label><b>Website</b></label>
@@ -21,7 +22,7 @@
             <input type="text" name="backupcodes">
             <hr>
             <button type="submit" class="registerbtn">Submit</button>
-              <p><a href="{{ url_for('signin') }}">Logout</a></p>
+              <button type="button" class="registerbtn" onclick="window.location.href='{{ url_for( 'signin') }}';">logout</button>
           </div>
         </form>
     </body>

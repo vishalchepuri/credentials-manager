@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
 </head>
 <body>
-    <p><a href="{{ url_for('test') }}">Add data</a></p>
+    <button type="button"  onclick="window.location.href='{{ url_for( 'test') }}';">Add data</button>
     <hr>
-    <p><a href="{{ url_for('signin') }}">Logout</a></p>
+    <button type="button"  onclick="window.location.href='{{ url_for( 'signin') }}';">logout</button>
     <table>
         <thead>
             <tr>
