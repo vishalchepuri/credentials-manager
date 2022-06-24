@@ -3,10 +3,9 @@ from flask import Flask, render_template, request, flash
 import auth
 import firestore
 import secure
-check, flag, email, encryption_password = False, 0, "", ""
+check, flag, email, encryption_password, website = False, 0, "", "", ""
 app = Flask(__name__)
 app.secret_key = "AES"
-
 
 
 def password_strength(paswd):
@@ -95,17 +94,18 @@ def table():
 
 
 @app.route('/edit/<id>', methods=['GET'])
-def edit(user_id):
-    global check
+def edit(id):
+    global check, website
+    website = id
     decryptedData = {}
-    if user_id == 'Website' or user_id == 'Credential Manager':
+    if website == 'Website' or website == 'Credential Manager':
         return table()
-    data = firestore.get_document(email, ID)
-    decryptedData["Type"] = ID
+    website = website
+    data = firestore.get_document(email, website)
+    decryptedData["Type"] = website
     decryptedData["Username"] = secure.decrypt(data['Username'], encryption_password)
     decryptedData["Password"] = secure.decrypt(data['Password'], encryption_password)
     decryptedData["Backupcodes"] = secure.decrypt(data['Backupcodes'], encryption_password)
-    # print(decryptedData)
     return render_template("edit.html", data=decryptedData)
 
 
@@ -113,23 +113,19 @@ def edit(user_id):
 def update_data():
     global check
     global encryption_password
-    decryptedData = {}
     website = str(request.form['type'])
-    decryptedData['Username'] = secure.encrypt(str(request.form['username']), encryption_password)
-    decryptedData['Password'] = secure.encrypt(str(request.form['password']), encryption_password)
-    decryptedData['Backupcodes'] = secure.encrypt(str(request.form['backupcodes']), encryption_password)
-    # print(decryptedData)
-    firestore.update_document(email, website, decryptedData, encryption_password)
-    data = firestore.get_result(email)
-    # print(type(data))
-    decryptedData = {}
-    for i in data:
-        decryptedData[i] = {}
-        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
-        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
-        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
-
-    return render_template('table.html', data=decryptedData)
+    if request.method == 'POST':
+        if request.form.get('action1') == 'submit':
+            data = request.form
+            data['Username'] = secure.encrypt(data['Username'], encryption_password)
+            data['Password'] = secure.encrypt(data['Password'], encryption_password)
+            data['Backupcodes'] = secure.encrypt(data['Backupcodes'], encryption_password)
+            firestore.update_document(email, website, data,encryption_password)
+            return table()
+        else:
+            firestore.delete_document(email, website, encryption_password)
+            return table()
+    return table()
 
 
 @app.route('/add_data', methods=['POST', 'GET', 'PATCH'])
@@ -154,21 +150,19 @@ def encryption_password():
         if flag:
             firestore.add_test_data(email, encryption_password)
             time.sleep(1)
-        decryptedData = {}
-        data = firestore.get_result(email)
-        for i in data:
-            decryptedData[i] = {}
-            decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
-            decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
-            decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
-        return render_template('table.html', data=decryptedData)
+        return table()
     return render_template('login.html')
 
 
 @app.route('/forgotpassword', methods=['POST', 'GET'])
-def forgotpassword(email="test"):
+def forgotpassword(email=None):
     auth.forgot_password(email)
     return render_template('login.html')
+
+@app.route('/delete_document')
+def delete_document():
+    firestore.delete_document(email, website, encryption_password)
+    return table()
 
 
 if __name__ == '__main__':

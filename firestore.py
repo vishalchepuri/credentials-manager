@@ -9,7 +9,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
-def check_encryption_password(email, website, password):
+def check_encryption_password(email, password):
     doc = db.collection(email).document('Credential Manager').get()
     data = doc.to_dict()
     if secure.decrypt(data['Password'], password):
@@ -17,23 +17,23 @@ def check_encryption_password(email, website, password):
     return False
 
 
-def get_result(ID):
-    users_ref = db.collection(ID)
+def get_result(user_id):
+    users_ref = db.collection(user_id)
     res = {}
     for doc in users_ref.get():
         res[doc.id] = doc.to_dict()
     return res
 
 
-def get_document(ID, document):
-    users_ref = db.collection(ID).document(document)
+def get_document(user_id, document):
+    users_ref = db.collection(user_id).document(document)
     doc = users_ref.get()
     res = doc.to_dict()
     return res
 
 
 def update_document(email, website, data, password):
-    if check_encryption_password(email, website, password):
+    if check_encryption_password(email, password):
         city_ref = db.collection(email).document(website)
         city_ref.update(data)
     else:
@@ -41,10 +41,11 @@ def update_document(email, website, data, password):
 
 
 def set_result(email, website, data, password):
-    if check_encryption_password(email, website, password):
+    if check_encryption_password(email, password):
         db.collection(email).document(website).set(data)
     else:
         pass
+
 
 def add_test_data(email, encryption_password):
     website = 'Credential Manager'
@@ -56,10 +57,17 @@ def add_test_data(email, encryption_password):
     db.collection(email).document(website).set(data)
 
 
+def delete_document(email, website, password):
+    if check_encryption_password(email, password):
+        db.collection(email).document(website).delete()
+    else:
+        pass
+
+
 def codes(code):
-    codes = db.collection('Access codes').get()
+    access_codes = db.collection('Access codes').get()
     lst = []
-    for doc in codes:
+    for doc in access_codes:
         lst.append(doc.id)
     if code in lst:
         db.collection('Access codes').document(code).delete()
