@@ -2,13 +2,15 @@
 <html lang="en">
     <head>
         <title>Credential Manager</title>
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+{#        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">#}
         <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
+
+
     </head>
     <body>
-        <button type="button"   onclick="window.location.href='{{ url_for( 'table') }}';">Home</button>
+        <button type="button" class="button1"   onclick="window.location.href='{{ url_for( 'table') }}';">Home</button>
         <form action="/add_data" method="POST">
-          <div class="container">
+          <div>
             <label><b>Website</b></label>
             <input type="text" name="website">
 

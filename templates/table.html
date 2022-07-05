@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/table.css') }}">
 </head>
 <body>
-    <button type="button"  onclick="window.location.href='{{ url_for( 'test') }}';">Add data</button>
+    <button type="button"  class="button1" onclick="window.location.href='{{ url_for( 'test') }}';">Add data</button>
     <hr>
-    <button type="button"  onclick="window.location.href='{{ url_for( 'signin') }}';">logout</button>
     <table>
         <thead>
             <tr>
@@ -24,13 +23,13 @@
                 <tr>
                     <td>{{ i }}</td>
                     <td>{{ data[i]['Username']}}</td>
-                    <td>{{ data[i]['Password'] }}</td>
+                    <td type="password">{{ data[i]['Password'] }}</td>
                     <td>{{ data[i]['Backupcodes'] }}</td>
                 </tr>
             {%endfor%}
-
         </tbody>
     </table>
+    <button type="button" class="button1"  onclick="window.location.href='{{ url_for( 'signin') }}';">logout</button>
     <script  type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
 </body>
 </html>

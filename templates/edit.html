@@ -5,7 +5,7 @@
         <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
     </head>
     <body>
-    <p><a href="{{ url_for('signin') }}">Logout</a></p>
+     <button type="button"  class="button1" onclick="window.location.href='{{ url_for( 'signin') }}';">logout</button>
         <form action="/update_data" method="POST">
           <div class="container">
             <input style="border: none;background: white;font-weight: bold;font-size: x-large" type="text"  name="type" value="{{ data['Type'] }}" readonly>
@@ -13,14 +13,15 @@
             <label><b>Username</b></label>
             <input type="text" name="username" value="{{ data['Username'] }}" >
 
+
             <label><b>Password</b></label>
             <input type="text" name="password" value="{{ data['Password'] }}" >
 
             <label><b>Backupcodes</b></label>
             <input type="text" name="backupcodes" value="{{ data['Backupcodes'] }}">
             <hr>
-            <button type="submit" value="submit" class="registerbtn">Submit</button>
-              <button style="background:#D4240C" type="submit" value="delete" class="registerbtn">Delete</button>
+            <button type="submit" name="action1" value="submit" class="registerbtn">Submit</button>
+              <button style="background:#D4240C"  name="action1" type="submit" value="delete" class="registerbtn">Delete</button>
           </div>
         </form>
     </body>
