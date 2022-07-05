@@ -52,3 +52,13 @@ a {
   background-color: #f1f1f1;
   text-align: center;
 }
+.button1{
+background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}

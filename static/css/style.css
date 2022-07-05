@@ -37,7 +37,7 @@ margin-bottom: 26px;
   box-sizing: border-box;
   font-size: 14px;
 }
-.form button {
+.form button, .login-form input[type="submit"] {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
@@ -75,4 +75,21 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+.title {
+  text-align: center;
+  padding: 0 0 2rem 0;
+  text-transform: uppercase;
+}
+.button1{
+background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
 }
