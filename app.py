@@ -111,15 +111,14 @@ def edit(id):
 
 @app.route('/update_data', methods=['POST', 'GET'])
 def update_data():
-    global check
-    global encryption_password
-    website = str(request.form['type'])
     if request.method == 'POST':
-        if request.form.get('action1') == 'submit':
-            data = request.form
-            data['Username'] = secure.encrypt(data['Username'], encryption_password)
-            data['Password'] = secure.encrypt(data['Password'], encryption_password)
-            data['Backupcodes'] = secure.encrypt(data['Backupcodes'], encryption_password)
+        
+        if request.form['action1'] == 'submit':
+            data = request.form.to_dict()
+            print(data)
+            data['Username'] = secure.encrypt(data['username'], encryption_password)
+            data['Password'] = secure.encrypt(data['password'], encryption_password)
+            data['Backupcodes'] = secure.encrypt(data['backupcodes'], encryption_password)
             firestore.update_document(email, website, data,encryption_password)
             return table()
         else:
@@ -163,6 +162,18 @@ def forgotpassword(email=None):
 def delete_document():
     firestore.delete_document(email, website, encryption_password)
     return table()
+
+# @app.route('/delete_document',methods=['POST', 'GET'])
+# def delete_document():
+#     print("Called this")
+#     website = str(request.form['type'])
+#     print(website)
+#     if request.method == 'POST':
+#         print("This is post")
+#         website = str(request.form['type'])
+#         firestore.delete_document(email, website, encryption_password)
+#     return table()
+
 
 
 if __name__ == '__main__':
