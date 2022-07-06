@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
 </head>
 <body>
-<form action="/update_data" method="POST">
+<form action="/updatedata" method="POST">
     <div class="container" style="background-color: #F3F7F7">
         <input id="heading" style="border: none;background: #F3F7F7;font-weight: bold;font-size: x-large"
                type="text"
@@ -32,10 +32,10 @@
         <hr>
 
         <div class="button-container">
-            <input type="submit" name="action1" value="Submit" class="registerbtn"/>
-            <input style="background:#F3422B" name="action1" type="submit" value="Delete" class="registerbtn"/>
             <input type="button" class="button1" value="Logout"
                    onclick="window.location.href='{{ url_for( 'signin') }}';"/>
+            <input style="background:#F3422B" name="action1" type="submit" value="Delete" class="registerbtn"/>
+            <input type="submit" name="action1" value="Submit" class="registerbtn"/>
         </div>
     </div>
 </form>
