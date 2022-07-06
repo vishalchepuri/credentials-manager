@@ -29,6 +29,13 @@ def signin() :
     check, flag, email, encryption_password = False, 0, "", ""
     return render_template('login.html')
 
+@app.errorhandler(404)
+def handle_404(e):
+    return 'ERROR 404: Page not found'
+
+# @app.errorhandler(Exception)
+# def handle_bad_request(e):
+#     return 'Please login to continue'
 
 @app.route('/signup')
 def signup() :
@@ -76,47 +83,50 @@ def login() :
             return render_template('signup.html')
 
 
-@app.route('/test', methods=['POST', 'GET'])
-def test() :
-    return render_template('add_data.html')
+@app.route('/new', methods=['POST', 'GET'])
+def new() :
+    return render_template('adddata.html')
 
 
 @app.route('/table', methods=['POST', 'GET'])
 def table() :
-    global check
-    data = firestore.get_result(email)
-    decryptedData = {}
-    for i in data :
-        decryptedData[i] = {}
-        decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
-        decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
-        decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
-    return render_template('table.html', data=decryptedData)
+    if (request.method == 'POST' and check) or (request.method == 'GET' and check) :
+        data = firestore.get_result(email)
+        decryptedData = {}
+        for i in data :
+            decryptedData[i] = {}
+            decryptedData[i]["Username"] = secure.decrypt(data[i]['Username'], encryption_password)
+            decryptedData[i]["Password"] = secure.decrypt(data[i]['Password'], encryption_password)
+            decryptedData[i]["Backupcodes"] = secure.decrypt(data[i]['Backupcodes'], encryption_password)
+        return render_template('table.html', data=decryptedData)
+    else:
+        return render_template('login.html')
 
 
 @app.route('/edit/<id>', methods=['GET'])
 def edit(id) :
     global check, website
-    website = id
-    decryptedData = {}
-    if website == 'WEBSITE' or website == 'Credential Manager':
-        return table()
-    website = website
-    data = firestore.get_document(email, website)
-    decryptedData["Type"] = website
-    decryptedData["Username"] = secure.decrypt(data['Username'], encryption_password)
-    decryptedData["Password"] = secure.decrypt(data['Password'], encryption_password)
-    decryptedData["Backupcodes"] = secure.decrypt(data['Backupcodes'], encryption_password)
-    return render_template("edit.html", data=decryptedData)
+    if (request.method == 'POST' and check) or (request.method == 'GET' and check):
+        website = id
+        decryptedData = {}
+        if website == 'WEBSITE' or website == 'Credential Manager':
+            return table()
+        website = website
+        data = firestore.get_document(email, website)
+        decryptedData["Type"] = website
+        decryptedData["Username"] = secure.decrypt(data['Username'], encryption_password)
+        decryptedData["Password"] = secure.decrypt(data['Password'], encryption_password)
+        decryptedData["Backupcodes"] = secure.decrypt(data['Backupcodes'], encryption_password)
+        return render_template("edit.html", data=decryptedData)
+    else:
+        return signin()
 
 
-@app.route('/update_data', methods=['POST', 'GET'])
+@app.route('/updatedata', methods=['POST', 'GET'])
 def update_data() :
-    if request.method == 'POST' :
-        print(request.form['action1'])
+    if (request.method == 'POST' and check) or (request.method == 'GET' and check) :
         if request.form['action1'] == 'Submit':
             data = request.form.to_dict()
-            print(data)
             data['Username'] = secure.encrypt(data['username'], encryption_password)
             data['Password'] = secure.encrypt(data['password'], encryption_password)
             data['Backupcodes'] = secure.encrypt(data['backupcodes'], encryption_password)
@@ -125,33 +135,37 @@ def update_data() :
         else :
             firestore.delete_document(email, website, encryption_password)
             return table()
-    return table()
+    else:
+            return signin()
 
 
-@app.route('/add_data', methods=['POST', 'GET', 'PATCH'])
+@app.route('/append', methods=['POST', 'GET', 'PATCH'])
 def add_data() :
-    global check
-    website = str(request.form['website'])
-    user_id = email
-    data = {
-        u'Username' : secure.encrypt(str(request.form['username']), encryption_password),
-        u'Password' : secure.encrypt(str(request.form['password']), encryption_password),
-        u'Backupcodes' : secure.encrypt(str(request.form['backupcodes']), encryption_password)
-    }
-    firestore.set_result(user_id, website, data, encryption_password)
-    return render_template('add_data.html')
+    if (request.method == 'POST' and check) or (request.method == 'GET' and check) :
+        website = str(request.form['website'])
+        user_id = email
+        data = {
+            u'Username' : secure.encrypt(str(request.form['username']), encryption_password),
+            u'Password' : secure.encrypt(str(request.form['password']), encryption_password),
+            u'Backupcodes' : secure.encrypt(str(request.form['backupcodes']), encryption_password)
+        }
+        firestore.set_result(user_id, website, data, encryption_password)
+        return render_template('adddata.html')
+    else:
+        return signin()
 
 
-@app.route('/done', methods=['POST', 'GET'])
+@app.route('/data', methods=['POST', 'GET'])
 def encryption_password() :
     global encryption_password
-    if request.method == 'POST' :
+    if (request.method == 'POST' and check) or (request.method == 'GET' and check)  :
         encryption_password = str(request.form['encryption_password'])
         if flag :
             firestore.add_test_data(email, encryption_password)
             time.sleep(1)
         return table()
-    return render_template('login.html')
+    else:
+        return render_template('login.html')
 
 
 @app.route('/forgotpassword', methods=['POST', 'GET'])
