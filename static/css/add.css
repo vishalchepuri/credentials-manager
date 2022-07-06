@@ -12,12 +12,9 @@ body {
     border-radius: 2rem;
 }
 
-#heading {
-    margin: 2rem 0;
-    background-color: #95A5A6;
-}
 
-#username, #password, #backup_codes {
+
+#website, #username, #password, #backup_codes {
     flex-grow: 2;
     font-size: 1.5rem;
     margin: auto 1rem;
@@ -35,7 +32,8 @@ label {
 
 .small-container {
     padding: 2rem 0;
-    width: 49%;
+    width: 47%;
+    margin: auto 1%;
     display: inline-flex;
 }
 
