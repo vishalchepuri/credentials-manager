@@ -1,28 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Credential Manager</title>
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
-    </head>
-    <body>
-     <button type="button"  class="button1" onclick="window.location.href='{{ url_for( 'signin') }}';">logout</button>
-        <form action="/update_data" method="POST">
-          <div class="container">
-            <input style="border: none;background: white;font-weight: bold;font-size: x-large" type="text"  name="type" value="{{ data['Type'] }}" readonly>
-            <hr>
-            <label><b>Username</b></label>
-            <input type="text" name="username" value="{{ data['Username'] }}" >
+<head>
+    <title>Credential Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/edit.css') }}">
+</head>
+<body>
+<form action="/update_data" method="POST">
+    <div class="container" style="background-color: #F3F7F7">
+        <input id="heading" style="border: none;background: #F3F7F7;font-weight: bold;font-size: x-large"
+               type="text"
+               name="type"
+               value="{{ data['Type'] }}" readonly/>
+        <hr>
+
+        <div class="small-container">
+            <label for="username">Username: </label>
+            <input id="username" type="text" name="username" value="{{ data['Username'] }}">
+        </div>
 
 
-            <label><b>Password</b></label>
-            <input type="text" name="password" value="{{ data['Password'] }}" >
+        <div class="small-container">
+            <label for="password">Password: </label>
+            <input id="password" type="text" name="password" value="{{ data['Password'] }}">
+        </div>
 
-            <label><b>Backupcodes</b></label>
-            <input type="text" name="backupcodes" value="{{ data['Backupcodes'] }}">
-            <hr>
-            <button type="submit" name="action1" value="submit" class="registerbtn">Submit</button>
-              <button style="background:#D4240C"  name="action1" type="submit" value="delete" class="registerbtn">Delete</button>
-          </div>
-        </form>
-    </body>
+        <div class="small-container not-small">
+            <label for="backup_codes">Backupcodes: </label>
+            <input style="width: 100%" id="backup_codes" type="text" name="backupcodes"
+                   value="{{ data['Backupcodes'] }}"/>
+        </div>
+        <hr>
+
+        <div class="button-container">
+            <input type="submit" name="action1" value="Submit" class="registerbtn"/>
+            <input style="background:#F3422B" name="action1" type="submit" value="Delete" class="registerbtn"/>
+            <input type="button" class="button1" value="Logout"
+                   onclick="window.location.href='{{ url_for( 'signin') }}';"/>
+        </div>
+    </div>
+</form>
+</body>
 </html>
