@@ -29,6 +29,7 @@ def signin() :
     check, flag, email, encryption_password = False, 0, "", ""
     return render_template('login.html')
 
+
 @app.errorhandler(404)
 def handle_404(e):
     return 'ERROR 404: Page not found'
@@ -36,6 +37,7 @@ def handle_404(e):
 # @app.errorhandler(Exception)
 # def handle_bad_request(e):
 #     return 'Please login to continue'
+
 
 @app.route('/signup')
 def signup() :
@@ -62,7 +64,7 @@ def submit() :
             # ^ (?=.*[A-Za-z])(?=.* \d)(?=.*[@ $! % *  # ?&])[A-Za-z\d@$!%*#?&]{8,}$
             if len(password) <= 5 :
                 flash(u'Invalid password provided')
-            return render_template('login.html', dict=dict)
+            return render_template('signup.html', dict=dict)
 
 
 @app.route('/login', methods=['POST', 'GET', 'PATCH'])
@@ -80,7 +82,7 @@ def login() :
                 print(e.args)
             return render_template('encryption_password.html')
         else :
-            return render_template('signup.html')
+            return render_template('login.html')
 
 
 @app.route('/new', methods=['POST', 'GET'])
