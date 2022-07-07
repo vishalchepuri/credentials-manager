@@ -7,7 +7,6 @@ def encrypt(data, paswd):
 
 
 def decrypt(data, paswd):
-    print(data, paswd)
     var = cryptocode.decrypt(data, paswd)
     return var
 

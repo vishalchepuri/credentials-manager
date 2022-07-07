@@ -58,7 +58,7 @@ def submit() :
         password = str(request.form['password'])
         check = auth.signup(email, password)
         flag = 1
-        if check :
+        if check:
             return render_template('encryption_password.html')
         else :
             # ^ (?=.*[A-Za-z])(?=.* \d)(?=.*[@ $! % *  # ?&])[A-Za-z\d@$!%*#?&]{8,}$
@@ -182,17 +182,6 @@ def delete_document() :
     return table()
 
 
-# @app.route('/delete_document',methods=['POST', 'GET'])
-# def delete_document():
-#     print("Called this")
-#     website = str(request.form['type'])
-#     print(website)
-#     if request.method == 'POST':
-#         print("This is post")
-#         website = str(request.form['type'])
-#         firestore.delete_document(email, website, encryption_password)
-#     return table()
-
 
 if __name__ == '__main__' :
-    app.run(debug=True)
+    app.run()
