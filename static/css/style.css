@@ -5,7 +5,11 @@ header .header {
     background-color: #fff;
     height: 45px;
 }
-
+.message {
+    margin: 15px 0 0;
+    color: rgba(100, 100, 100, 1);
+    font-size: 12px;
+}
 header a img {
     width: 134px;
     margin-top: 4px;
