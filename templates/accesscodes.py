@@ -3,14 +3,14 @@ from getpass import getpass
 
 
 firebaseConfig = {
-  "apiKey": "AIzaSyB9Kmo6Adz2lESIYWcUewS900CTq9HoMEg",
-  "authDomain": "temp-f5544.firebaseapp.com",
-  "projectId": "temp-f5544",
-  "storageBucket": "temp-f5544.appspot.com",
-  "messagingSenderId": "69666549650",
-  "appId": "1:69666549650:web:a139672b8104e10c499b4b",
-  "measurementId": "G-HKTQ9YG9PF",
-  'databaseURL': 'https://temp-f5544.firebaseio.com',
+  "apiKey": "",
+  "authDomain": "",
+  "projectId": "",
+  "storageBucket": "",
+  "messagingSenderId": "",
+  "appId": "",
+  "measurementId": "",
+  'databaseURL': '',
 }
 
 
