@@ -1,13 +1,13 @@
 import pyrebase
 config = {
-        "apiKey": "AIzaSyDEHCenBLxNRtsS8CBbWYqkqjl94bnVzyY",
-    "authDomain": "credential-manager-a0d90.firebaseapp.com",
-    "projectId": "credential-manager-a0d90",
-    "storageBucket": "credential-manager-a0d90.appspot.com",
-    "messagingSenderId": "816081903625",
-    "appId": "1:816081903625:web:5ebaae9420b132649d18d8",
-    "measurementId": "G-MYKFJQMJHY",
-    "databaseURL": "https://credential-manager-a0d90.firebaseio.com"
+        "apiKey": "",
+    "authDomain": "",
+    "projectId": "",
+    "storageBucket": "",
+    "messagingSenderId": "",
+    "appId": "",
+    "measurementId": "",
+    "databaseURL": ""
     }
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
